@@ -33,16 +33,6 @@ public class ImageReader {
         var extensions = Arrays.asList(supportedExtensions.split(","));
         log.info("Supported extensions: {}", extensions);
 
-        var newFile = new File("testfile.txt");
-        try {
-            if (newFile.exists()) {
-                newFile.delete();
-            }
-            newFile.createNewFile();
-        } catch (IOException e) {
-            log.error("Exception: ", e);
-        }
-
         try (Stream<Path> stream = Files.list(Paths.get(currentDir.getAbsolutePath()))) {
             var filesInFolder = stream
                     .filter(path -> !Files.isDirectory(path) &&

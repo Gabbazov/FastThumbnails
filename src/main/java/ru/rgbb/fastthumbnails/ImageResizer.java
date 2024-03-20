@@ -3,6 +3,7 @@ package ru.rgbb.fastthumbnails;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import jakarta.annotation.Nonnull;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Component
+@Log4j2
 public class ImageResizer {
 
     @Value("${thumbnail.height:200}")
@@ -29,6 +31,8 @@ public class ImageResizer {
     public File resize(@Nonnull final File file) {
 
         var fileName = file.getName();
+        log.info("Resize image {} to heigh {} with thumbnail name {}", fileName, thumbnailHeight, thumbnailName);
+
         var outputfile = new File(FilenameUtils.removeExtension(fileName) + "_" + thumbnailName);
 
         try {
