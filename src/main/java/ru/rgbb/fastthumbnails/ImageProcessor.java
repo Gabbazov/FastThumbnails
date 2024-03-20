@@ -17,7 +17,9 @@ public class ImageProcessor {
 
         log.info("Start processing");
         imageReader.getFilesFromCurrentDirectory()
-                .forEach(f -> imageWriter.writeToCurrentDirectory(f.getName(), imageResizer.resize(f)));
+                .forEach(f -> imageWriter.writeToCurrentDirectory(
+                        f.getFileName().toString(),
+                        imageResizer.resize(f)));
         log.info("Finish processing");
     }
 }

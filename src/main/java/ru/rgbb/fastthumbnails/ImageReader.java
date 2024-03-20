@@ -2,6 +2,7 @@ package ru.rgbb.fastthumbnails;
 
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +25,13 @@ public class ImageReader {
     @Value("${supported.extensions:png}")
     private String supportedExtensions;
 
-    @Nonnull
-    public Collection<File> getFilesFromCurrentDirectory() {
+    @Value("${thumbnail.name:thumbnail}")
+    private String thumbnailName;
 
-        var currentDir = new File("");
+    @Nonnull
+    public Collection<Path> getFilesFromCurrentDirectory() {
+
+        var currentDir = new File(StringUtils.EMPTY);
         log.info("Current dir: {}", currentDir.getAbsolutePath());
 
         var extensions = Arrays.asList(supportedExtensions.split(","));
@@ -36,10 +40,10 @@ public class ImageReader {
         try (Stream<Path> stream = Files.list(Paths.get(currentDir.getAbsolutePath()))) {
             var filesInFolder = stream
                     .filter(path -> !Files.isDirectory(path) &&
+                            !StringUtils.containsIgnoreCase(path.getFileName().toString(), thumbnailName) &&
                             extensions.stream().anyMatch(path.toFile().getName().toLowerCase()::endsWith))
-                    .map(Path::toFile)
                     .collect(Collectors.toSet());
-            log.info("Got files: {}", filesInFolder);
+            log.info("Got files to resize: {}", filesInFolder);
             return filesInFolder;
         } catch (IOException e) {
             log.error("Exception: ", e);

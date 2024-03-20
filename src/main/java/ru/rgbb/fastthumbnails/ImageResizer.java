@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 @Component
 @Log4j2
@@ -24,13 +25,14 @@ public class ImageResizer {
     private int thumbnailHeight;
 
     @Nonnull
-    public BufferedImage resize(@Nonnull final File file) {
+    public BufferedImage resize(@Nonnull final Path path) {
 
+        log.info("Resize file {}", path.getFileName());
         try {
-            return getResizedImage(file);
+            return getResizedImage(path.toFile());
         } catch (IOException e) {
             log.error("Exception: ", e);
-            throw new IllegalArgumentException("Exception while resize image " + file.getName() + ": " + e.getMessage());
+            throw new IllegalArgumentException("Exception while resize image " + path.getFileName() + ": " + e.getMessage());
         }
     }
 

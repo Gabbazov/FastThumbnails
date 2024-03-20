@@ -22,6 +22,8 @@ public class ImageWriter {
     void writeToCurrentDirectory(@Nonnull final String sourceFilename,
                                  @Nonnull final BufferedImage bufferedImage) {
 
+        log.info("Write fo current directory resized image for file {}", sourceFilename);
+        
         var outputfile = new File(
                 String.format("%s_%s.%s",
                         FilenameUtils.removeExtension(sourceFilename),
