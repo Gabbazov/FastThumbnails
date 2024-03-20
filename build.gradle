@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'edu.sc.seis.launch4j' version '3.0.5'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+group = 'ru.rgbb'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '21'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter')
+            {
+                exclude group: "org.springframework.boot", module: "spring-boot-starter-logging";
+            }
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+    implementation 'org.apache.logging.log4j:log4j-spring-boot'
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'com.drewnoakes:metadata-extractor:2.19.0'
+    implementation 'commons-io:commons-io:2.15.1'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+launch4j() {
+    mainClassName = 'ru.rgbb.fastthumbnails.FastThumbnailsApplication'
+    headerType = 'console'
+    copyConfigurable = []
+    jarTask = project.tasks.shadowJar
+    // icon = "${projectDir}/icons/myApp.ico"
+}
