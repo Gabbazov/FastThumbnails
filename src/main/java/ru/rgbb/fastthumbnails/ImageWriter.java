@@ -23,12 +23,16 @@ public class ImageWriter {
                                  @Nonnull final BufferedImage bufferedImage) {
 
         log.info("Write fo current directory resized image for file {}", sourceFilename);
-        
+
         var outputfile = new File(
                 String.format("%s_%s.%s",
                         FilenameUtils.removeExtension(sourceFilename),
                         thumbnailName,
                         FilenameUtils.getExtension(sourceFilename)));
+        if (outputfile.exists()) {
+            log.error("Output file {} already exists", outputfile.getName());
+            return;
+        }
 
         try {
             ImageIO.write(bufferedImage, FilenameUtils.getExtension(sourceFilename), outputfile);
