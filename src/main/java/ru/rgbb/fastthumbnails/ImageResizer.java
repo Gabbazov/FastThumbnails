@@ -4,7 +4,6 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import jakarta.annotation.Nonnull;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,25 +23,15 @@ public class ImageResizer {
     @Value("${thumbnail.height:200}")
     private int thumbnailHeight;
 
-    @Value("${thumbnail.name:thumbnail}")
-    private String thumbnailName;
-
     @Nonnull
-    public File resize(@Nonnull final File file) {
-
-        var fileName = file.getName();
-        log.info("Resize image {} to heigh {} with thumbnail name {}", fileName, thumbnailHeight, thumbnailName);
-
-        var outputfile = new File(FilenameUtils.removeExtension(fileName) + "_" + thumbnailName);
+    public BufferedImage resize(@Nonnull final File file) {
 
         try {
-            var resizedFile = getResizedImage(file);
-            ImageIO.write(resizedFile, FilenameUtils.getExtension(fileName), outputfile);
+            return getResizedImage(file);
         } catch (IOException e) {
-            // TODO
+            log.error("Exception: ", e);
+            throw new IllegalArgumentException("Exception while resize image " + file.getName() + ": " + e.getMessage());
         }
-
-        return outputfile;
     }
 
     @Nonnull
@@ -69,7 +58,7 @@ public class ImageResizer {
     }
 
     /**
-     * Resize image keeping proportions. Smallest side is IMG_SIDE_SIZE
+     * Resize image keeping proportions.
      *
      * @throws IOException
      */
@@ -81,11 +70,16 @@ public class ImageResizer {
         double origWidth = originalImage.getWidth();
         double origHeight = originalImage.getHeight();
         double ratio = Math.max(origWidth, origHeight) / Math.min(origWidth, origHeight);
+
         int newHeight = thumbnailHeight;
         int newWidth = (int) Math.round(thumbnailHeight * ratio);
+
         final var resultingImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
         final var outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+
         outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+
         return outputImage;
     }
 
@@ -93,9 +87,8 @@ public class ImageResizer {
      * Rotate given image to given angle
      */
     @Nonnull
-    private static BufferedImage getRotatedImage(
-            @Nonnull final BufferedImage outputImage,
-            final double angle) {
+    private static BufferedImage getRotatedImage(@Nonnull final BufferedImage outputImage,
+                                                 final double angle) {
 
         double radian = Math.toRadians(angle);
         double sin = Math.abs(Math.sin(radian));

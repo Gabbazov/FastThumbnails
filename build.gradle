@@ -47,5 +47,5 @@ launch4j() {
     headerType = 'console'
     copyConfigurable = []
     jarTask = project.tasks.shadowJar
-    // icon = "${projectDir}/icons/myApp.ico"
+    icon = "${projectDir}/src/main/resources/icon.ico"
 }
