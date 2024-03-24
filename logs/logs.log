@@ -1,6 +1,0 @@
-2024-03-20 16:39:58,417 INFO o.s.b.StartupInfoLogger [main] Starting FastThumbnailsApplication using Java 21.0.2 with PID 20704 (C:\PROJECTS\FastThumbnails\build\classes\java\main started by rgabbazov in C:\PROJECTS\FastThumbnails)
-2024-03-20 16:39:58,420 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
-2024-03-20 16:39:58,792 INFO o.s.b.StartupInfoLogger [main] Started FastThumbnailsApplication in 0.614 seconds (process running for 1.385)
-2024-03-20 16:39:58,796 INFO r.r.f.ImageReader [main] Current dir: C:\PROJECTS\FastThumbnails
-2024-03-20 16:39:58,796 INFO r.r.f.ImageReader [main] Supported extensions: [jpeg, jpg, bmp, png]
-2024-03-20 16:39:58,801 INFO r.r.f.ImageReader [main] Got files: [C:\PROJECTS\FastThumbnails\java.png]
